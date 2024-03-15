@@ -24,11 +24,15 @@ type sessionManager struct {
 }
 
 func newSessionManager() *sessionManager {
-	return &sessionManager{
+	sm := &sessionManager{
 		clients:   map[string][]*Session{},
 		peers:     map[string][]*Session{},
 		listeners: map[sessionListener]bool{},
 	}
+	info.Lock()
+	info.sms = append(info.sms, sm)
+	info.Unlock()
+	return sm
 }
 
 func toDialer(s *Session, prefix string) Dialer {
